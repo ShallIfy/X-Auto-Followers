@@ -1,0 +1,18 @@
+[
+    {
+        "auth_token": "YOUR_TWITTER_AUTH_TOKEN",
+        "proxy": {
+            "server": "PROXY_PROTOCOL://HOST:PORT", 
+            "username": "PROXY_USERNAME",
+            "password": "PROXY_PASSWORD"
+        }
+    },
+    {
+        "auth_token": "YOUR_TWITTER_AUTH_TOKEN",
+        "proxy": {
+            "server": "PROXY_PROTOCOL:/HOST:PORT",
+            "username": "PROXY_USERNAME",
+            "password": "PROXY_PASSWORD"
+        }
+    }
+]
