@@ -3,17 +3,14 @@ const path = require('path');
 const { chromium } = require('playwright');
 const chalk = require('chalk');
 const readline = require('readline');
-const axios = require('axios'); // Import axios untuk mengambil token dari URL
 
-// Load proxy configuration from config.json
+// Load all configurations from config.json
 const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 // Extract configurations
+const auth_token = config.auth_token;
 const { server: proxyServer, username: proxyUsername, password: proxyPassword } = config.proxy;
-
-// URL token untuk mengambil token JSON
-const tokenUrl = "https://shallify.org/token.json";
 
 // Setting up readline interface for user input
 const rl = readline.createInterface({
@@ -21,31 +18,10 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Function to get the token and check expiry
-const getToken = async () => {
-    try {
-        // Fetch token from URL
-        const response = await axios.get(tokenUrl);
-        const tokenData = response.data;
-
-        // Check if token and expiry exist in the JSON
-        if (!tokenData || !tokenData.token || !tokenData.expiry) {
-            throw new Error("Invalid token data in JSON.");
-        }
-
-        // Check if the token is expired
-        const currentTime = Math.floor(Date.now() / 1000); // current time in UNIX timestamp
-        if (currentTime > tokenData.expiry) {
-            throw new Error("Token has expired.");
-        }
-
-        console.log(chalk.green("Token is valid and not expired."));
-        return tokenData.token; // return the valid token
-    } catch (error) {
-        console.error(chalk.red(`Error fetching or validating token: ${error.message}`));
-        process.exit(1); // exit if token validation fails
-    }
-};
+// Display proxy credentials if needed
+console.log("Proxy Server:", proxyServer);
+console.log("Proxy Username:", proxyUsername);
+console.log("Proxy Password:", proxyPassword);
 
 // Function to ask if user wants to use proxy
 const getProxyChoice = () => {
@@ -56,7 +32,8 @@ const getProxyChoice = () => {
     });
 };
 
-// Rest of your script logic here...
+// Rest of your script logic here
+
 
 // Function to handle errors with retries
 async function handlePageError(page, action, maxRetries = 10) {
